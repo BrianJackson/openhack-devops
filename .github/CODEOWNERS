@@ -1,2 +1,5 @@
 # Assign POI code owner
-/api/poi @brianjackson
+/apis/poi @brianjackson
+/apis/trips @brianjackson
+/apis/user-java @brianjackson
+/apis/userprofile @brianjackson
