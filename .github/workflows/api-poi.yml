@@ -14,9 +14,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./apis/poi/
     steps:
     - uses: actions/checkout@v2
         
@@ -30,6 +27,5 @@ jobs:
       with:
         # Build the container using ACR task.  The Dockerfile will build and run unit tests.
         inlineScript: |
-          pwd
-          ls
-          az acr build --registry openhack4nl2avg0acr --image devopsoh/api-poi:${GITHUB_RUN_NUMBER} --file Dockerfile ./apis/poi/web
+          cd apis/poi/web
+          az acr build --registry openhack4nl2avg0acr --image devopsoh/api-poi:${GITHUB_RUN_NUMBER} .
