@@ -14,13 +14,16 @@ jobs:
         working-directory: ./apis/poi
     steps:
     - uses: actions/checkout@v2
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
+        
+    - name: Azure Login
+      uses: azure/login@v1
       with:
-        dotnet-version: 5.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+    - name: Azure CLI Action
+      uses: Azure/cli@1.0.4
+      with:
+        # Build the container using ACR task.  The Dockerfile will build and run unit tests.
+        inlineScript: |
+          az acr build -n "openhack4nl2avg0acr.azurecr.io" -t "devopsoh/api-poi:1.0" ./web/Dockerfile
+     
