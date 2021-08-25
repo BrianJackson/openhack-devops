@@ -9,8 +9,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      working-directory: ./apis/poi
+    defaults:
+      run:
+        working-directory: ./apis/poi
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET
