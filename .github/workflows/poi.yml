@@ -3,9 +3,13 @@ name: .NET
 on:
   push:
     branches: [ main ]
+    paths:
+      - './apis/poi/**'
   pull_request:
     branches: [ main ]
-
+    paths:
+      - './apis/poi/**'
+      
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -25,5 +29,5 @@ jobs:
       with:
         # Build the container using ACR task.  The Dockerfile will build and run unit tests.
         inlineScript: |
-          az acr build -n "openhack4nl2avg0acr.azurecr.io" -t "devopsoh/api-poi:1.0" ./web/Dockerfile
+          az acr build --registry openhack4nl2avg0acr --image devopsoh/api-poi:${GITHUB_RUN_NUMBER} --file Dockerfile ./web
      
