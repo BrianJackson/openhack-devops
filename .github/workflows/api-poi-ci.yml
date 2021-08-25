@@ -32,5 +32,5 @@ jobs:
       run: dotnet build --no-restore
       working-directory: ./apis/poi/web
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --verbosity normal
       working-directory: ./apis/poi/tests/UnitTests
