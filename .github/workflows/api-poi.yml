@@ -33,8 +33,9 @@ jobs:
     - name: Test
       run: dotnet test --verbosity normal
       working-directory: ./apis/poi/tests/UnitTests
-    - name: Show Event
-      run: echo ${{github.event_name}}
+    - name: Create issue on failure
+      if: ${{ failure() }}
+      run: gh issue create --title 'Build ${{ github.run_id }} failed for workflow ${{ github.workflow }}' --project 'Trips Open Hack' --body 'The build job has failed.'  --assignee ${{ github.actor }} 
 
   deploy:
     runs-on: ubuntu-latest
@@ -42,6 +43,8 @@ jobs:
     if: ${{ github.event_name != 'pull_request' }}
     env:
       working-directory: apis/poi/
+      webapp-name: openhack4nl2avg0poi
+      resource-group: openhack4nl2avg0rg
     steps:
     - uses: actions/checkout@v2
     - name: Azure Login
@@ -57,8 +60,28 @@ jobs:
           cd ${{env.working-directory}}/web
           az acr build --registry openhack4nl2avg0acr --build-arg ${{ github.sha }} --image devopsoh/api-poi:${{ github.sha }} .
           
+    - name: Configure Web App Health Check
+      # Health checks will ensure application readiness during deployment slot swaps.  Each API has a healthcheck route
+      uses: Azure/cli@1.0.4
+      with:
+        inlineScript: |
+          az webapp config set -g ${{env.resource-group}} -n ${{env.webapp-name}} --generic-configurations '{"healthCheckPath": "api/healthcheck/poi"}'
+          az webapp config set -g ${{env.resource-group}} -n ${{env.webapp-name}} --slot staging --generic-configurations '{"healthCheckPath": "api/healthcheck/poi"}'
+          
     - name: Azure WebApp
       uses: Azure/webapps-deploy@v2
       with:
         app-name: 'openhack4nl2avg0poi'
+        slot-name: staging
         images: 'openhack4nl2avg0acr.azurecr.io/devopsoh/api-poi:${{ github.sha }}'
+        
+    - name: Swap staging to production
+      uses: Azure/cli@1.0.4
+      with:
+        inlineScript: |
+          az webapp deployment slot swap --name ${{env.webapp-name}} --resource-group ${{env.resource-group}} --slot staging
+        
+    - name: Create issue on failure
+      if: ${{ failure() }}
+      run: gh issue create --title 'Deployment ${{ github.run_id }} failed for workflow ${{ github.workflow }}' --project 'Trips Open Hack' --body 'The deployment job has failed.'  --assignee ${{ github.actor }} 
+ 
