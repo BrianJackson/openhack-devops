@@ -1,4 +1,4 @@
-name: API-TRIPS-CI
+name: api-trips
 
 on:
   push:
@@ -52,6 +52,6 @@ jobs:
       uses: Azure/webapps-deploy@v2
       with:
         app-name: 'openhack4nl2avg0trips'
-        images: 'openhack4nl2avg0acr.azurecr.io/devopsoh/api-trips:${{GITHUB_RUN_NUMBER}}'
+        images: openhack4nl2avg0acr.azurecr.io/devopsoh/api-trips:${GITHUB_RUN_NUMBER}
 
     
