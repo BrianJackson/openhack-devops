@@ -46,12 +46,12 @@ jobs:
         # Build the container using ACR task.  The Dockerfile will build and run unit tests.
         inlineScript: |
           cd ${{env.working-directory}}
-          az acr build --registry openhack4nl2avg0acr --build-arg ${GITHUB_RUN_NUMBER} --image devopsoh/api-trips:${GITHUB_RUN_NUMBER} .
+          az acr build --registry openhack4nl2avg0acr --build-arg ${{ github.sha }} --image devopsoh/api-trips:${{ github.sha }} .
     
     - name: Azure WebApp
       uses: Azure/webapps-deploy@v2
       with:
         app-name: 'openhack4nl2avg0trips'
-        images: openhack4nl2avg0acr.azurecr.io/devopsoh/api-trips:${GITHUB_RUN_NUMBER}
+        images: 'openhack4nl2avg0acr.azurecr.io/devopsoh/api-trips:${{ github.sha }}'
 
     
