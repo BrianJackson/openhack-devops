@@ -34,3 +34,24 @@ jobs:
     - name: Test
       run: dotnet test --verbosity normal
       working-directory: ./apis/poi/tests/UnitTests
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    if: ${{ github.eventname == 'push'}}
+    env:
+      working-directory: apis/poi/
+    steps:
+    - uses: actions/checkout@v2
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+    - name: Azure CLI Action
+      uses: Azure/cli@1.0.4
+      with:
+        # Build the container using ACR task.  The Dockerfile will build and run unit tests.
+        inlineScript: |
+          cd ${{env.working-directory}}/web
+          az acr build --registry openhack4nl2avg0acr --image devopsoh/api-poi:${GITHUB_RUN_NUMBER} .
