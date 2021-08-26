@@ -56,3 +56,9 @@ jobs:
         inlineScript: |
           cd ${{env.working-directory}}/web
           az acr build --registry openhack4nl2avg0acr --build-arg ${GITHUB_RUN_NUMBER} --image devopsoh/api-poi:${GITHUB_RUN_NUMBER} .
+          
+    - name: Azure WebApp
+      uses: Azure/webapps-deploy@v2
+      with:
+        app-name: 'openhack4nl2avg0poi'
+        images: 'openhack4nl2avg0acr.azurecr.io/devopsoh/api-poi:${GITHUB_RUN_NUMBER}'
