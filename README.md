@@ -44,3 +44,6 @@ The provisioning of this environment for proctors can be found in the [DevOps Op
    ```       
    
  * Web Applications in Azure support a health check URL.   Each API has a health check endpoint.   Specifying the health check allows deployment slot swaps to occur only when the    staging slot is healthy.
+   ```
+   az webapp config set -g <groupName> -n <web name>  --generic-configurations '{"healthCheckPath": "/api/health/"}'
+   ```
