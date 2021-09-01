@@ -1,0 +1,5 @@
+# Assign an owner to each API
+/apis/poi @brianjackson
+/apis/trips @brianjackson
+/apis/user-java @brianjackson
+/apis/userprofile @brianjackson

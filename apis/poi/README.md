@@ -24,6 +24,7 @@ dotnet test .
 This will run both the Unit Tests and the Integration Tests
 
 > Please note that the __Integration Tests__ require the Database to be available
+> The database should be deployed to Azure SQL Database and the connection information should be reflected in application settings via Key Vault references.
 
 ## References
 

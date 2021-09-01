@@ -3,14 +3,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using poi.Utility;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace poi
 {
+    [ExcludeFromCodeCoverage]
     public class Program
     {
-        public static void Main(string[] args) 
-            => CreateHostBuilder(args).Build().Run();
+        public static void Main(string[] args) => CreateHostBuilder(args).Build().Run();
 
         public static IHostBuilder CreateHostBuilder(string[] args)
         {
