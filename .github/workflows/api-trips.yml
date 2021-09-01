@@ -19,11 +19,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      SQL_SERVER: ${{ secrets.SQL_SERVER }}
-      SQL_PASSWORD: ${{ secrets.SQL_PASWORD }}
-      SQL_USER: ${{ secrets.SQL_USER }}
-      SQL_DBNAME: "mydrivingDB"
-      SQL_DRIVER: "mssql"
       
     steps:
     - uses: actions/checkout@v2
@@ -38,12 +33,18 @@ jobs:
 
     - name: Integration Test
       run: go test ./tripsgo 
+      env:
+        SQL_SERVER: ${{ secrets.SQL_SERVER }}
+        SQL_PASSWORD: ${{ secrets.SQL_PASWORD }}
+        SQL_USER: ${{ secrets.SQL_USER }}
+        SQL_DBNAME: "mydrivingDB"
+        SQL_DRIVER: "mssql"
       
     - name: Create issue on failure
       if: ${{ failure() }}
       run: |
         gh issue create --title 'Build ${{ github.run_id }} failed for workflow ${{ github.workflow }}' \
-           --project 'Trips Open Hack' --body 'The build job has failed.'  \
+           --project 'Trips Open Hack' --body 'The build job has failed on branch $GITHUB_REF.'  \
            --assignee ${{ github.actor }} 
         
   deploy:
@@ -96,6 +97,6 @@ jobs:
       if: ${{ failure() }}
       run: |
         gh issue create --title 'Deployment ${{ github.run_id }} failed for workflow ${{ github.workflow }}' \
-          --project 'Trips Open Hack' --body 'The deployment job has failed.'  \
+          --project 'Trips Open Hack' --body 'The deployment job has failed on branch $GITHUB_REF.'  \
           --assignee ${{ github.actor }} 
    
