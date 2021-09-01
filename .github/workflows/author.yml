@@ -1,0 +1,25 @@
+# This workflow is a catch all to assign an author to a workflow
+
+name: authorassign
+
+# Controls when the workflow will run
+on: 
+  push:
+    paths:
+    - './.github/workflows/**'
+
+  pull_request:
+    paths:
+    - './.github/workflows/**'
+    
+jobs:
+  # Build job for branch check
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # Assigns an author to the PR
+      - name: Assign author to PR
+        uses: technote-space/assign-author@v1
