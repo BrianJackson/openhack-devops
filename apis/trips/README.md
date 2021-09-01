@@ -24,7 +24,7 @@ go run main.go
 
 To run all integration tests:
 
-* Add a file called .evn to the tripsgo folder with the following structue:
+* Add a file called .env to the tripsgo folder with the following structue:
   ```shell
   SQL_SERVER="<-- your database server uri -- >"
   SQL_PASSWORD="<-- your login password -- >"
