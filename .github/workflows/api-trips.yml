@@ -39,8 +39,8 @@ jobs:
       run: go test ./tripsgo -run Unit
 
     - name: Integration Test
-      #run: go test ./tripsgo
-      run: echo "Integration test does not correctly read environment variables, disabled. ${{env.SQL_SERVER}} ${{env.SQL_USER}} ${{env.SQL_DRIVER}}"
+      run: go test ./tripsgo
+      #run: echo "Integration test does not correctly read environment variables, disabled. ${{env.SQL_SERVER}} ${{env.SQL_USER}} ${{env.SQL_DRIVER}}"
       env:
         SQL_SERVER: ${{ secrets.SQL_SERVER }}
         SQL_PASSWORD: ${{ secrets.SQL_PASWORD }}
@@ -78,6 +78,7 @@ jobs:
       with:
         change_path: "apis/trips"
         namespace: trips
+        bump_each_commit: true
 
     - name: Azure CLI Action
       uses: Azure/cli@1.0.4
