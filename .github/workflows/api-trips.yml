@@ -43,6 +43,8 @@ jobs:
       working-directory: apis/trips/
       webapp-name: openhack4nl2avg0trips
       resource-group: openhack4nl2avg0rg
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
     steps:
     - uses: actions/checkout@v2
     - name: Azure Login
