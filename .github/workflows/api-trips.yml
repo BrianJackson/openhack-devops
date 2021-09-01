@@ -13,9 +13,12 @@ on:
 defaults:
   run:
     working-directory: ./apis/trips
+    
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
     - uses: actions/checkout@v2
     - name: Setup Go environment
@@ -30,7 +33,6 @@ jobs:
     - name: Create issue on failure
       if: ${{ failure() }}
       run: |
-        gh auth login --with-token < ${{ secrets.GITHUB_TOKEN }}
         gh issue create --title 'Build ${{ github.run_id }} failed for workflow ${{ github.workflow }}' --project 'Trips Open Hack' --body 'The build job has failed.'  --assignee ${{ github.actor }} 
         
   deploy:
