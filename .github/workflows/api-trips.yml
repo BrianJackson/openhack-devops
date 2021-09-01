@@ -8,6 +8,7 @@ on:
   pull_request:
     paths:
       - 'apis/trips/**'
+      - '.github/workflows/api-trips.yml'
   workflow_dispatch:
 
 defaults:
@@ -27,7 +28,13 @@ jobs:
       with:
         # The Go version to download (if necessary) and use. Supports semver spec and ranges.
         go-version: 1.15
-                
+    
+    - name: Install Dependencies
+      working-directory: apis/trips
+      run: go get
+    - name: Build
+      working-directory: apis/trips
+      run: go build
     - name: Unit Test
       run: go test ./tripsgo -run Unit
 
