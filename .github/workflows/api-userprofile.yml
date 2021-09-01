@@ -18,9 +18,9 @@ defaults:
     working-directory: ./apis/userprofile
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
+    env: 
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
     - uses: actions/checkout@v2
     - name: Setup Node.js environment
@@ -39,6 +39,8 @@ jobs:
       working-directory: apis/userprofile/
       webapp-name: openhack4nl2avg0userprofile
       resource-group: openhack4nl2avg0rg
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
     steps:
     - uses: actions/checkout@v2
     - name: Azure Login
