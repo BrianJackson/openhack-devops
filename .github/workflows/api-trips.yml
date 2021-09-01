@@ -19,6 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
     steps:
     - uses: actions/checkout@v2
     - name: Setup Go environment
@@ -30,44 +31,22 @@ jobs:
     - name: Unit Test
       run: go test ./tripsgo -run Unit
 
-    - name: Integration Test set SQL Server
-      uses: jacobtomlinson/gha-find-replace@0.1.4
-      with:
-        # A regular expression of files to include in our find and replace
-        include: ./tripsgo/.env
-        # The string we want to replace
-        find: "__SQLSERVER__"
-        # The new string to replace with
-        replace: ${{ secrets.SQL_SERVER }}
-
-    - name: Integration Test set SQL User
-      uses: jacobtomlinson/gha-find-replace@0.1.4
-      with:
-        # A regular expression of files to include in our find and replace
-        include: ./tripsgo/.env
-        # The string we want to replace
-        find: "__SQLUSER__"
-        # The new string to replace with
-        replace: ${{ secrets.SQL_USER }}
-      
-    - name: Integration Test set SQL Password
-      uses: jacobtomlinson/gha-find-replace@0.1.4
-      with:
-        # A regular expression of files to include in our find and replace
-        include: ./tripsgo/.env
-        # The string we want to replace
-        find: "__SQLPASSWORD__"
-        # The new string to replace with
-        replace: ${{ secrets.SQL_PASSWORD }}
-  
     - name: Integration Test
-      #run: go test ./tripsgo 
-      run: echo Integration test noop as it does not work correctly as coded.
+      #run: go test ./tripsgo
+      run: echo "Integration test does not correctly read environment variables, disabled. ${{env.SQL_SERVER}} ${{env.SQL_USER}} ${{env.SQL_DRIVER}}"
+      env:
+        SQL_SERVER: ${{ secrets.SQL_SERVER }}
+        SQL_PASSWORD: ${{ secrets.SQL_PASWORD }}
+        SQL_USER: ${{ secrets.SQL_USER }}
+        SQL_DBNAME: "mydrivingDB"
+        SQL_DRIVER: "mssql"
       
     - name: Create issue on failure
       if: ${{ failure() }}
       run: |
-        gh issue create --title 'Build ${{ github.run_id }} failed for workflow ${{ github.workflow }}' --project 'Trips Open Hack' --body 'The build job has failed.'  --assignee ${{ github.actor }} 
+        gh issue create --title 'Build ${{ github.run_id }} failed for workflow ${{ github.workflow }}' \
+           --project 'Trips Open Hack' --body 'The build job has failed on branch ${{ github.ref }}.'  \
+           --assignee ${{ github.actor }} 
         
   deploy:
     runs-on: ubuntu-latest
@@ -86,13 +65,20 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
         
+    - name: Application Version
+      id: appversion
+      uses: paulhatch/semantic-version@v4.0.2
+      with:
+        change_path: "apis/trips"
+        namespace: trips
+
     - name: Azure CLI Action
       uses: Azure/cli@1.0.4
       with:
         # Build the container using ACR task.  The Dockerfile will build and run unit tests.
         inlineScript: |
           cd ${{env.working-directory}}
-          az acr build --registry openhack4nl2avg0acr --build-arg ${{ github.sha }} --image devopsoh/api-trips:${{ github.sha }} .
+          az acr build --registry openhack4nl2avg0acr --build-arg ${{ steps.appversion.outputs.version }} --image devopsoh/api-trips:${{ steps.appversion.outputs.version }} .
 
     - name: Configure Web App Health Check
       # Health checks will ensure application readiness during deployment slot swaps.  Each API has a healthcheck route
@@ -107,7 +93,7 @@ jobs:
       with:
         app-name: 'openhack4nl2avg0trips'
         slot-name: staging
-        images: 'openhack4nl2avg0acr.azurecr.io/devopsoh/api-trips:${{ github.sha }}'
+        images: 'openhack4nl2avg0acr.azurecr.io/devopsoh/api-trips:${{ steps.appversion.outputs.version }}'
 
     - name: Swap staging to production
       uses: Azure/cli@1.0.4
@@ -117,5 +103,8 @@ jobs:
         
     - name: Create issue on failure
       if: ${{ failure() }}
-      run: gh issue create --title 'Deployment ${{ github.run_id }} failed for workflow ${{ github.workflow }}' --project 'Trips Open Hack' --body 'The deployment job has failed.'  --assignee ${{ github.actor }} 
+      run: |
+        gh issue create --title 'Deployment ${{ github.run_id }} failed for workflow ${{ github.workflow }}' \
+          --project 'Trips Open Hack' --body 'The deployment job has failed on branch ${{ github.ref }}.'  \
+          --assignee ${{ github.actor }} 
    
