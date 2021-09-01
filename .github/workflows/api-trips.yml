@@ -27,9 +27,39 @@ jobs:
         # The Go version to download (if necessary) and use. Supports semver spec and ranges.
         go-version: 1.15
         
+    - name: Integration Test set SQL Server
+      uses: jacobtomlinson/gha-find-replace@0.1.4
+      with:
+        # A regular expression of files to include in our find and replace
+        include: ./tripsgo/.evn
+        # The string we want to replace
+        find: "__SQLSERVER__"
+        # The new string to replace with
+        replace: ${{ secrets.SQL_SERVER }}
+
+    - name: Integration Test set SQL User
+      uses: jacobtomlinson/gha-find-replace@0.1.4
+      with:
+        # A regular expression of files to include in our find and replace
+        include: ./tripsgo/.evn
+        # The string we want to replace
+        find: "__SQLUSER__"
+        # The new string to replace with
+        replace: ${{ secrets.SQL_USER }}
+      
+    - name: Integration Test set SQL Password
+      uses: jacobtomlinson/gha-find-replace@0.1.4
+      with:
+        # A regular expression of files to include in our find and replace
+        include: ./tripsgo/.evn
+        # The string we want to replace
+        find: "__SQLPASSWORD__"
+        # The new string to replace with
+        replace: ${{ secrets.SQL_PASSWORD }}
+          
     - name: Test
       run: go test ./tripsgo -run Unit
-
+    
     - name: Create issue on failure
       if: ${{ failure() }}
       run: |
