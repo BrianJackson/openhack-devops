@@ -39,3 +39,4 @@ To run all integration tests:
   ```
 
 > Note: this requires an actual database connection, so the required ENV variables need to be present.
+> Be certain that you do not store secrets in the repo!
