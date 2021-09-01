@@ -33,7 +33,7 @@ jobs:
 
     - name: Integration Test
       #run: go test ./tripsgo
-      run: echo "Integration test does not correctly read environment variables, disabled. $SQL_SERVER $SQL_USER $SQL_DRIVER"
+      run: echo "Integration test does not correctly read environment variables, disabled. ${{env.SQL_SERVER}} ${{env.SQL_USER}} ${{env.SQL_DRIVER}}"
       env:
         SQL_SERVER: ${{ secrets.SQL_SERVER }}
         SQL_PASSWORD: ${{ secrets.SQL_PASWORD }}
@@ -45,7 +45,7 @@ jobs:
       if: ${{ failure() }}
       run: |
         gh issue create --title 'Build ${{ github.run_id }} failed for workflow ${{ github.workflow }}' \
-           --project 'Trips Open Hack' --body 'The build job has failed on branch $GITHUB_REF.'  \
+           --project 'Trips Open Hack' --body 'The build job has failed on branch ${{ github.ref }}.'  \
            --assignee ${{ github.actor }} 
         
   deploy:
@@ -105,6 +105,6 @@ jobs:
       if: ${{ failure() }}
       run: |
         gh issue create --title 'Deployment ${{ github.run_id }} failed for workflow ${{ github.workflow }}' \
-          --project 'Trips Open Hack' --body 'The deployment job has failed on branch $GITHUB_REF.'  \
+          --project 'Trips Open Hack' --body 'The deployment job has failed on branch ${{ github.ref }}.'  \
           --assignee ${{ github.actor }} 
    
