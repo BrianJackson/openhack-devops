@@ -25,12 +25,14 @@ jobs:
         go-version: 1.15
         
     - name: Test
-      run: go test ./tripsgo -run Unit
+      run: go test ./tripsgof -run Unit
 
     - name: Create issue on failure
       if: ${{ failure() }}
-      run: gh issue create --title 'Build ${{ github.run_id }} failed for workflow ${{ github.workflow }}' --project 'Trips Open Hack' --body 'The build job has failed.'  --assignee ${{ github.actor }} 
-
+      run: |
+        gh auth login --with-token < ${{ secrets.GITHUB_TOKEN }}
+        gh issue create --title 'Build ${{ github.run_id }} failed for workflow ${{ github.workflow }}' --project 'Trips Open Hack' --body 'The build job has failed.'  --assignee ${{ github.actor }} 
+        
   deploy:
     runs-on: ubuntu-latest
     needs: build
