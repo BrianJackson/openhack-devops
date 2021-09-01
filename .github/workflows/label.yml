@@ -22,3 +22,8 @@ jobs:
       with:
         # The GITHUB_TOKEN secret
         repo-token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Create issue on failure
+      if: ${{ failure() }}
+      run: gh issue create --title 'Build ${{ github.run_id }} failed for workflow ${{ github.workflow }}' --project 'Trips Open Hack' --body 'The build job has failed.'  --assignee ${{ github.actor }} 
+
