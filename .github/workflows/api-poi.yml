@@ -65,8 +65,8 @@ jobs:
       id: appversion
       uses: paulhatch/semantic-version@v4.0.2
       with:
-        change_path: "apis/trips"
-        namespace: trips
+        change_path: "apis/poi"
+        namespace: poi
         bump_each_commit: true
         
     - name: Azure CLI Action
