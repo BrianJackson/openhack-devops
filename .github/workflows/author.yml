@@ -3,14 +3,7 @@
 name: authorassign
 
 # Controls when the workflow will run
-on: 
-  push:
-    paths:
-    - './.github/workflows/**'
-
-  pull_request:
-    paths:
-    - './.github/workflows/**'
+on: pull_request
     
 jobs:
   # Build job for branch check
