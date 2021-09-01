@@ -4,10 +4,10 @@ on:
   push:
     branches: [ main ]
     paths:
-      - './apis/poi/**'
+      - 'apis/poi/**'
   pull_request:
     paths:
-      - './apis/poi/**'
+      - 'apis/poi/**'
   workflow_dispatch:
 
 defaults:

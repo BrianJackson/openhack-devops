@@ -7,10 +7,10 @@ on:
   push:
     branches: [ main ]
     paths:
-      - './apis/userprofile/**'
+      - 'apis/userprofile/**'
   pull_request:
     paths:
-      - './apis/userprofile/**'
+      - 'apis/userprofile/**'
   workflow_dispatch:
 
 defaults:
