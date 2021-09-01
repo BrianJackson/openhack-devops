@@ -18,6 +18,9 @@ defaults:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+         
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 11
@@ -42,6 +45,7 @@ jobs:
       working-directory: apis/user-java/
       webapp-name: openhack4nl2avg0userjava
       resource-group: openhack4nl2avg0rg
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
     - uses: actions/checkout@v2
     - name: Azure Login
