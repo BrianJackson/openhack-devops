@@ -28,7 +28,7 @@ jobs:
         go-version: 1.15
         
     - name: Test
-      run: go test ./tripsgof -run Unit
+      run: go test ./tripsgo -run Unit
 
     - name: Create issue on failure
       if: ${{ failure() }}
