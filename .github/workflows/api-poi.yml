@@ -8,6 +8,7 @@ on:
   pull_request:
     paths:
       - 'apis/poi/**'
+      - '.github/workflows/api-poi.yml'
   workflow_dispatch:
 
 defaults:
@@ -36,7 +37,10 @@ jobs:
       working-directory: ./apis/poi/tests/UnitTests
     - name: Create issue on failure
       if: ${{ failure() }}
-      run: gh issue create --title 'Build ${{ github.run_id }} failed for workflow ${{ github.workflow }}' --project 'Trips Open Hack' --body 'The build job has failed.'  --assignee ${{ github.actor }} 
+      run: |
+        gh issue create --title 'Build ${{ github.run_id }} failed for workflow ${{ github.workflow }}' \
+          --project 'Trips Open Hack' --body 'The build job has failed.'  \
+          --assignee ${{ github.actor }} 
 
   deploy:
     runs-on: ubuntu-latest
