@@ -7,7 +7,7 @@ on: pull_request
     
 jobs:
   # Build job for base checks
-  build:
+  basecheck:
     runs-on: ubuntu-latest
 
     steps:
