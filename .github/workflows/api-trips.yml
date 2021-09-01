@@ -34,7 +34,7 @@ jobs:
       uses: jacobtomlinson/gha-find-replace@0.1.4
       with:
         # A regular expression of files to include in our find and replace
-        include: ./tripsgo/.evn
+        include: ./tripsgo/.env
         # The string we want to replace
         find: "__SQLSERVER__"
         # The new string to replace with
@@ -44,7 +44,7 @@ jobs:
       uses: jacobtomlinson/gha-find-replace@0.1.4
       with:
         # A regular expression of files to include in our find and replace
-        include: ./tripsgo/.evn
+        include: ./tripsgo/.env
         # The string we want to replace
         find: "__SQLUSER__"
         # The new string to replace with
@@ -54,7 +54,7 @@ jobs:
       uses: jacobtomlinson/gha-find-replace@0.1.4
       with:
         # A regular expression of files to include in our find and replace
-        include: ./tripsgo/.evn
+        include: ./tripsgo/.env
         # The string we want to replace
         find: "__SQLPASSWORD__"
         # The new string to replace with
