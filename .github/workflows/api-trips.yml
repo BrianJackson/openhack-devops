@@ -4,10 +4,10 @@ on:
   push:
     branches: [ main ]
     paths:
-      - './apis/trips/**'
+      - 'apis/trips/**'
   pull_request:
     paths:
-      - './apis/trips/**'
+      - 'apis/trips/**'
   workflow_dispatch:
 
 defaults:
