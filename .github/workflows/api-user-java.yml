@@ -56,6 +56,14 @@ jobs:
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    - name: Application Version
+      id: appversion
+      uses: paulhatch/semantic-version@v4.0.2
+      with:
+        change_path: "apis/user-java"
+        namespace: user
+        bump_each_commit: true
         
     - name: Azure CLI Action
       uses: Azure/cli@1.0.4
@@ -63,7 +71,7 @@ jobs:
         # Build the container using ACR task. 
         inlineScript: |
           cd ${{env.working-directory}}
-          az acr build --registry openhack4nl2avg0acr --build-arg ${{ github.sha }} --image devopsoh/api-user-java:${{ github.sha }} .
+          az acr build --registry openhack4nl2avg0acr --build-arg ${{ steps.appversion.outputs.version }} --image devopsoh/api-user-java:${{ steps.appversion.outputs.version }} .
 
     - name: Configure Web App Health Check
       # Health checks will ensure application readiness during deployment slot swaps.  Each API has a healthcheck route
@@ -77,7 +85,7 @@ jobs:
       uses: Azure/webapps-deploy@v2
       with:
         app-name: 'openhack4nl2avg0userjava'
-        images: 'openhack4nl2avg0acr.azurecr.io/devopsoh/api-user-java:${{ github.sha }}'
+        images: 'openhack4nl2avg0acr.azurecr.io/devopsoh/api-user-java:${{ steps.appversion.outputs.version }}'
         
     - name: Swap staging to production
       uses: Azure/cli@1.0.4
