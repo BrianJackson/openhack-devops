@@ -1,12 +1,12 @@
-# This workflow is a catch all to assign an author to a workflow
+# This workflow contains global base checks
 
-name: authorassign
+name: base-checks
 
 # Controls when the workflow will run
 on: pull_request
     
 jobs:
-  # Build job for branch check
+  # Build job for base checks
   build:
     runs-on: ubuntu-latest
 

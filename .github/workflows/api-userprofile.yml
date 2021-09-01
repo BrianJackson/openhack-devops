@@ -20,6 +20,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env: 
+      # GitHub token added to environment to support gh CLI
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
     - uses: actions/checkout@v2
