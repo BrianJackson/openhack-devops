@@ -10,6 +10,7 @@ on:
   pull_request:
     paths:
       - 'apis/user-java/**'
+      - '.github/workflows/api-user-java.yml'
   workflow_dispatch:
 
 defaults:
@@ -35,7 +36,10 @@ jobs:
       run: mvn test
     - name: Create issue on failure
       if: ${{ failure() }}
-      run: gh issue create --title 'Build ${{ github.run_id }} failed for workflow ${{ github.workflow }}' --project 'Trips Open Hack' --body 'The build job has failed.'  --assignee ${{ github.actor }} 
+      run: |
+        gh issue create --title 'Build ${{ github.run_id }} failed for workflow ${{ github.workflow }}' \
+          --project 'Trips Open Hack' --body 'The build job has failed.'  \
+          --assignee ${{ github.actor }} 
 
   deploy:
     runs-on: ubuntu-latest
@@ -83,4 +87,7 @@ jobs:
         
     - name: Create issue on failure
       if: ${{ failure() }}
-      run: gh issue create --title 'Deployment ${{ github.run_id }} failed for workflow ${{ github.workflow }}' --project 'Trips Open Hack' --body 'The deployment job has failed.'  --assignee ${{ github.actor }} 
+      run: |
+        gh issue create --title 'Deployment ${{ github.run_id }} failed for workflow ${{ github.workflow }}' \
+          --project 'Trips Open Hack' --body 'The deployment job has failed.'  \
+          --assignee ${{ github.actor }} 
